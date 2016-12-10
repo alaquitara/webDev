@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Facebook API How-To-Guide</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="blog.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+  <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '227247861013915',
+      xfbml      : true,
+      version    : 'v2.8'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item" href="index.html">Home</a>
+          <a class="blog-nav-item active" href="page2.html">FB login </a>
+          <a class="blog-nav-item" href="page3.html">Share Dialogue</a>
+          <a class="blog-nav-item" href="end.html">End</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title">The <a href = "https://www.facebook.com/"> <img src = "fblogo.png" height = "50" width = "150"></a> API how to guide</h1>
+        <p class="lead blog-description">Created by Alexander Laquitara for OSU CS 290 Web Development.</p>
+		<div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
+</div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Facebook login credentials </h2>
+            <p>Learn to use Facebook login credentials on your own app or webpage.</p>
+            <hr>
+            <p> The first step to understanding the facebook login portion of the API is knowing the different login statuses.  They are as follows:</p>
+				<ol>
+					<li> The user is logged in and is authenticated.  This status is called <font color = "red">connected. </font> </li>
+					<li> The user is logged in but is not authenticated.  This status is called <font color = "red"> not_authorized. </font> </li>
+					<li> The user is not logged in or has logged out.  This status is called <font color = "red"> unkown</font> </li>
+				</ol>
+			<p> In order to "get" or test the status of the user, we use the <font color = "red"> FB.getLoginStatus() </font> function.  I'll demonstrate below how this could be used. </p>
+            <blockquote>
+              <p> <strong>Here is an example of a very simple function to test whether a user is connected via facebook login.  The function tests the user login status and returns a message accordingly.</p>
+			  <xmp>
+FB.getLoginStatus(function(response) {
+	    	if (response.status === 'connected') {
+	    		document.getElementById('status').innerHTML = 'connected.';
+	    	} else if (response.status === 'not_authorized') {
+	    		document.getElementById('status').innerHTML = 'not connected.';
+			}
+			else{
+	    		document.getElementById('status').innerHTML = 'You are not logged into Facebook.';
+	    	}
+	    });
+</xmp>
+            </blockquote>
+            <p>Now that we know how to check login status, lets apply this to a login button.</p>
+            <h2>Login Button:</h2>
+            <p>This is going to look much similar to the code used above to check status.</p>
+				<xmp>
+function login() {
+	FB.login(function(response) {
+		if (response.status === 'connected') {
+		  		document.getElementById('status').innerHTML = 'connected.';
+	   	} 
+		else if (response.status === 'not_authorized') {
+    		document.getElementById('status').innerHTML = 'not connected.';
+    	} 
+		else {
+			document.getElementById('status').innerHTML = 'You are not logged into Facebook.';
+		 	}
+		}); 
+}
+				</xmp>
+            <p>Noice here the only change with the function call at the top, here we swapped out <font color = "red"> FB.getLoginStatus() </font> for <font color = "red"> FB.login() </font>.  So instead of returning a status, this function is now communicating with facebook and allowing the user to actually login to the service.</p> 
+			<p>Lastly we need to know how to logout.  What good is logging in if this isn't an option?  The logout fuction is simply <font color = "red">FB.logout()</font></p>
+			
+			<div class = "blog-post">
+				<h2 class = "blog-post-title">Putting it all together. </h2>
+				<p> So know that we know how to get status and call the login function, lets put it all together and create a login user interface.</p>
+				<p> Facebook only allows secure cavas URL's so I will not be able to demonstrate with JS fiddle.  Below you will see the Javascript followed by the a working example.</p>
+				<p> One new addition exists here that has not been talked about earlier and that is the the getInfo() function. </p>
+				<img src = "newlog.PNG"></img>
+				<script>
+		
+		window.fbAsyncInit = function() {
+		    FB.init({
+		      appId      : '227247861013915',
+		      xfbml      : true,
+		      version    : 'v2.5'
+		    });
+			
+		    FB.getLoginStatus(function(response) {
+		    	if (response.status === 'connected') {
+		    		document.getElementById('status').innerHTML = 'We are connected.';
+		    		document.getElementById('login').style.visibility = 'hidden';
+		    	} else if (response.status === 'not_authorized') {
+		    		document.getElementById('status').innerHTML = 'We are not logged in.';
+		    	} else {
+		    		document.getElementById('status').innerHTML = 'You are not logged into Facebook.';
+		    	}
+		    });
+		};
+		(function(d, s, id){
+		    var js, fjs = d.getElementsByTagName(s)[0];
+		    if (d.getElementById(id)) {return;}
+		    js = d.createElement(s); js.id = id;
+		    js.src = "//connect.facebook.net/en_US/sdk.js";
+		    fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+		
+		// login with facebook with extra permissions
+		function login() {
+			FB.login(function(response) {
+				if (response.status === 'connected') {
+		    		document.getElementById('status').innerHTML = 'We are connected.';
+		    	} else if (response.status === 'not_authorized') {
+		    		document.getElementById('status').innerHTML = 'We are not logged in.';
+		    	} else {
+		    		document.getElementById('status').innerHTML = 'You are not logged into Facebook.';
+		    	}
+			}, {scope: 'email'});
+		}
+		
+		function logOut(){
+			FB.logout(function(response){
+			if(response.status){
+				document.getElementById('status').innerHTML = 'Successfully logged out';
+				}
+			});
+		}
+
+		function getInfo() {
+			FB.api('/me', 'GET', {fields: 'first_name,last_name,name,id'}, function(response) {
+				document.getElementById('status').innerHTML = "You are logged in as " + response.name;
+			});
+		}
+</script>
+	<p>I made three buttons to coorespond with these functions like this:</p>
+<xmp>
+	<div id="status"></div>
+	<button onclick="getInfo()">Get Info</button>
+	<button onclick="login()" id="login">Login</button>
+	<button onclick="logOut()" id="logout">Logout</button>
+</xmp>
+	<p>The final result looks like this!</p>
+	<div id="status"></div>
+	<button onclick="getInfo()">Get Info</button>
+	<button onclick="login()" id="login">Login</button>
+	<button onclick="logOut()" id="logout">Logout</button>
+
+				<p> Clicking on the Login button will prompt a facebook login.  Once logged in the Get Info Button displays the user name.  I was able to
+				access the user name via the <font color = "red"> FB.api </font> function .  There are many other member variables such as first name, last name, ID ECT.  The documentation can be found <a href = "https://developers.facebook.com/docs/javascript/reference/FB.api"> here </a> .</p>
+				
+				<p> You may have noticed a share option at the <a href = "#"> top </a> of the page. Now that we are able to log in and out of facebook feel free to share this page.</p>
+				<p> Next we will go into more depth on sharing and posting</p>
+			</div>
+          <nav>
+            <ul class="pager">
+              <li><a href="page3.html">Next</a></li>
+			  <li><a href="index.html">Previous</a></li>
+            </ul>
+          </nav>
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          
+         
+          <div class="sidebar-module">
+           
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>Built with <a href="http://getbootstrap.com">Bootstrap</a> by <a href="https://www.facebook.com/alex.laquitara">Alexander Laquitara</a>.</p>
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </footer>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<div id="head"></div>
+{{#each rowData}}
+<form action="/" method="POST" id="new-entry">
+    <fieldset>
+        <legend>Edit Workout</legend>
+        <div>
+            <label for="name">Name</label>
+            <input id="name" type="text" name="name" required value="{{this.name}}">
+        </div>
+        <div >
+            <label for="reps">Reps</label>
+            <input id="reps" type="number" min=0 name="reps" value="{{this.reps}}">
+        </div>
+        <div >
+            <label for="weight">Weight</label>
+            <input id="weight" name="weight" type="number" min=0 value="{{this.weight}}">
+        </div>
+        <div >
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" value="{{this.date}}">
+        </div>
+        <div>
+            <label for="lbs">lbs </label>
+            <input type="hidden" id="hid" value="{{this.lbs}}">
+            <input type="radio" name="lbs" value=1>
+            <label for="lbs"> kgs </label>
+            <input type="radio" name="lbs"value=0>
+        </div>
+        <div >
+            <input type="hidden" name="id" value="{{this.id}}">
+            <input type="submit" id="submit"value="Submit">
+        </div>
+    </fieldset>
+</form>
+{{/each}}
+<script src="edit.js"></script>

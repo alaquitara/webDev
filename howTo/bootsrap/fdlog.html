@@ -1,0 +1,159 @@
+<body>
+    <hr/>
+    <p>Simple demo of the Facebook POST API</p>
+    <p id="yes"></p>
+    <p id="no"></p>
+    <form id="poster">
+        <input type="text" id="status" />
+        <input id="post" type="submit" value="Post on my wall !"></input>
+    </form>
+    <hr/>
+    <div id="result"></div>
+    <hr/>
+    <button id="s_basic">Basic options</button>
+    <hr/>
+    <input type="text" id="photo" />
+    <button id="p_photo">Post a photo!</button>
+    <div id="basic">
+    <button id="logout">Logout</button>
+    <button id="login">Login</button>    
+    <p><button id="token">I want a longer access token</button></p>
+    </div>    
+</body>
+<script>
+      window.fbAsyncInit = function () {
+          FB.init({
+              appId: '565115376927668',
+              xfbml: true,
+              version: 'v2.0'
+          });
+          FB.getLoginStatus(function (response) {
+              if (response.status === 'connected') {
+                  console.log('Logged in.');
+                  $('#no').hide();
+                  $('#yes').show();
+                  console.log(response);
+              } else {
+                  FB.login(function (response) {
+                      console.log(response);
+                      temp_tok=response.authResponse.accessToken;
+                      if(response.status==="connected")
+                      {
+                          $('#no').hide();
+                          $('#yes').show();
+                      }
+                      FB.api("/me/feed", "POST", {
+                          "message": "Hello World!"
+                      }, function (response) {
+                          console.log(response);
+                      });
+                  }, {
+                      scope: 'publish_actions'
+                  });
+              }
+          });
+      };
+
+      (function (d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) {
+              return;
+          }
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js";
+          fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      $(document).ready(function () {
+          $("#poster").submit(function (event) {
+              FB.api("/me/feed", "POST", {
+                  "message": $("#status").val()
+              }, function (response) {
+                  console.log(response);
+                  if(response.error)return;
+                  $("#result").append("<p>Congrats! You successfully posted on your Facebook wall." + "</p>");
+                  var b = response.id;
+                  var c = b.split("_");
+                  console.log(c[0]);
+                  console.log(c[1]);
+                  var d = 'https://www.facebook.com/' + c[0] + '/posts/' + c[1];
+                  console.log(d);
+                  $("#result").append("<p><a href='" + d + "' target='_blank'>Don't believe?-Click me!</a>" + "</p>");
+              });
+              event.preventDefault();
+          });
+          $('#logout').click(function(){
+              alert('Here');
+              FB.logout(function(response){
+                  console.log(response);
+                  console.log(response.status);
+                  alert('Logged out!');
+                  $('#yes').hide();
+                  $('#no').show();
+              });
+          });
+           $('#login').click(function(){
+              alert('Here');
+               FB.login(function (response) {
+                      console.log(response);
+                      temp_tok=response.authResponse.accessToken;
+                      if(response.status==="connected")
+                      {
+                          $('#no').hide();
+                          $('#yes').show();
+                      }
+                      FB.api("/me/feed", "POST", {
+                          "message": "Hello World!"
+                      }, function (response) {
+                          console.log(response);
+                      });
+                  }, {
+                      scope: 'publish_actions'
+                  });
+          });
+          $('#token').click(function(){
+              alert(temp_tok);
+              console.log(temp_tok);
+              $.get('https://graph.facebook.com/oauth/access_token',
+                     {
+                         grant_type:'fb_exchange_token',           
+                         client_id:'565115376927668',
+                         client_secret:'9e01173ba13e7f68733993639824fa99',
+                         fb_exchange_token:temp_tok 
+                     },function(data){
+                       console.log(data);
+                     });
+          });
+          $('#s_basic').click(function(){
+            $('#basic').toggle();
+          });
+          $('#p_photo').click(function(){
+              console.log($('#photo').val());
+              var pho=$('#photo').val();
+              FB.api(
+    "/me/photos",
+    "POST",
+    {
+        "url": pho
+    },
+    function (response) {
+      if (response && !response.error) {
+        console.log(response);
+                          $("#result").append("<p>Congrats! You successfully posted a photo on your Facebook wall." + "</p>");
+                  var b = response.post_id;
+                  var c = b.split("_");
+                  console.log(c[0]);
+                  console.log(c[1]);
+                  var d = 'https://www.facebook.com/' + c[0] + '/photos/' + response.id;
+                  console.log(d);
+                  $("#result").append("<p><a href='" + d + "' target='_blank'>Don't believe?-Click me!</a>" + "</p>");
+          
+      }
+    }
+);
+          });                           
+      });
+</script>
+<div id = "status"></div>
+<button onclick = "login()" id="login"> Login</button>

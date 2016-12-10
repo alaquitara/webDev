@@ -1,0 +1,41 @@
+li{
+	list-style-type: none; /*http://stackoverflow.com/questions/2743138/how-can-i-hide-these-dots*/
+}
+
+tbody th:first-child{
+    font-style:italic;
+	font-weight: normal; /*http://stackoverflow.com/questions/8079070/how-to-remove-the-bold-from-a-headline*/
+}
+
+tbody td:nth-child(2){
+    color:red;
+}
+
+
+tbody td:nth-child(4){
+    color:blue;
+}
+
+/*  http://www.w3schools.com/cssref/sel_nth-child.asp */
+tbody tr:nth-child(odd){
+    background-color:#ADFF2F; 
+}
+tbody tr:nth-child(even){
+    background-color:#FFA07A; 
+}
+
+div.outer-content{
+    position: relative;
+    margin-left: 0px;
+    margin-top: 20px;
+    background-color:pink;
+    width: 75%;
+    padding: 12px;
+}
+
+#inner-content{
+    text-align: center; 
+	margin: 0 auto;  
+    background-color:lightblue;
+    width: 75%;
+

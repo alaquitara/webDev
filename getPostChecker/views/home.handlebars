@@ -1,0 +1,13 @@
+<h1>{{typeRec}} Request Received</h1>
+<h3>Parameters and Values Sent in URL Query</h3>
+<ul>
+  {{#each urlList}}
+    <li>{{this.name}}: {{this.value}}
+  {{/each}}
+</ul>
+<h3>Parameters and Values Sent in Body</h3>
+<ul>
+  {{#each postList}}
+    <li>{{this.name}}: {{this.value}}
+  {{/each}}
+</ul>

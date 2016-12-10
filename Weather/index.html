@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset ="UTF-8">
+	<title>AJAX Interactions</title>
+	<link rel ="stylesheet" href = "style.css" type = "text/css">
+	</head>
+	<body>
+		<p class ="top"> AJAX Interactions </p>
+		<div id="weather">
+			<p class = "explain"> Asynchronous Weather Get Request</p>
+			<form>
+				<fieldset>
+				<legend> Weather by Zipcode or City, State</legend>
+				<label for ="zipcode"> </label>
+				<input type = "text" name ="zipcode" id="zipcode"> </input>
+				<input type ="submit" value= "zipCode" id ="zip"> </input>
+				<label for ="locCode"> </label>
+				<input type = "text" name ="location" id="location"> </input>
+				<input type ="submit" value= "location" id ="loc"> </input>
+				</fieldset>
+			</form>
+			
+			<h2 class="returned"> Weather by zipcode: </h2>
+			<ul>
+				<li><span class="bullet">City: </span> <span id = "city"></span></li>
+				<li><span class="bullet">Temperature in Fahrenheit: </span> <span id ="temp"></span></li>
+				<li><span class="bullet">Humidity: </span> <span id ="humid"></span></li>
+			</ul>
+		</div>	
+		<div id="post">
+			<p class = "explain">Asynchronous Post</p>
+			<form>
+				<fieldset>
+					<legend> Working with post data</legend>
+					<label for ="postText"> </label>
+					<input type = text name = "postText" id ="postText"></input>
+					<input type = submit value ="textSub" id ="textSub"></input>
+				</fieldset>
+			</form>
+			<h2 class ="returned"> Text post return: </h2>
+			<p id ="things"></p>
+		</div>
+					
+	</body>
+	<script src="script.js"></script>
+</html>
